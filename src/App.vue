@@ -21,7 +21,11 @@
         />
       </div>
 
-      <v-spacer></v-spacer>
+      <v-spacer>
+        <center>
+          <h1>{{ $route.name }}</h1>
+        </center>
+      </v-spacer>
 
       <v-btn
         href="https://github.com/vuetifyjs/vuetify/releases/latest"
