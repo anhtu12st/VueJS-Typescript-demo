@@ -45,33 +45,31 @@
 
 <script lang="ts">
 import Vue from "vue";
-import Component from 'vue-class-component';
 
 import { ITodo, ITodoList } from "@/store/modules/todo";
 import AddTodoInput from "../components/AddTodoInput.vue";
 
-@Component({
+export default Vue.extend({
+  name: "todo-list-comp",
+  data: function () {
+    return { todos: new Array<ITodoList>() };
+  },
+  mounted: function () {
+    this.todos = this.$store.getters["todoList/getTodoList"];
+  },
+  methods: {
+    completeTodo(completed: boolean, todo: ITodo): void {
+      todo.isCompleted = completed;
+      this.$store.dispatch("todoList/editTodo", todo).then(() => {
+        this.todos = this.$store.getters.todos;
+      });
+    },
+    removeTodo(id: string): void {
+      this.$store.dispatch("todoList/removeTodo", id);
+    },
+  },
   components: {
-    AddTodoInput
-  }
-})
-export default class TodoListComponent extends Vue {
-  todos: ITodoList = [];
-
-  mounted() {
-    this.todos = this.$store.getters['todoList/getTodoList'];
-  }
-
-  completeTodo(completed: boolean, todo: ITodo) {
-    todo.isCompleted = completed;
-    this.$store.dispatch('todoList/editTodo', todo).then(res=>{
-      this.todos = this.$store.getters.todos;
-    })
-  }
-
-  removeTodo(id:string){
-    this.$store.dispatch('todoList/removeTodo',id)
-  }
-
-}
+    AddTodoInput,
+  },
+});
 </script>
